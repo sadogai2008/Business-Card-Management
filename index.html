@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ビジカマネ - Business Card Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -265,6 +266,41 @@
             margin-bottom: var(--spacing-lg);
             padding-bottom: var(--spacing-md);
             border-bottom: 2px solid var(--color-accent);
+        }
+
+        .my-card-preview {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--color-accent);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .my-card-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .my-card-company {
+            font-size: 14px;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .my-card-info {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .my-card-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            flex-wrap: wrap;
         }
 
         .recent-cards-list {
@@ -564,7 +600,7 @@
             color: #ffc107;
         }
 
-        /* テーブル表�� */
+        /* テーブル表示 */
         .table-wrapper {
             overflow-x: auto;
         }
@@ -901,6 +937,26 @@
             flex-wrap: wrap;
         }
 
+        .share-info {
+            background-color: var(--color-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .share-info-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
         /* トースト */
         .toast-container {
             position: fixed;
@@ -1005,6 +1061,32 @@
             margin-bottom: var(--spacing-xl);
         }
 
+        .login-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: var(--spacing-xl);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: var(--spacing-md);
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .login-tab.active {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+
         .login-form-group {
             margin-bottom: var(--spacing-lg);
         }
@@ -1021,9 +1103,16 @@
             width: 100%;
         }
 
+        .login-content {
+            display: none;
+        }
+
+        .login-content.active {
+            display: block;
+        }
+
         .login-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
             gap: var(--spacing-md);
             margin-top: var(--spacing-xl);
         }
@@ -1095,34 +1184,31 @@
             100% { transform: rotate(360deg); }
         }
 
-        .share-link-container {
-            background-color: var(--color-light);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
+        .add-to-card-modal {
+            text-align: center;
         }
 
-        .share-link-title {
-            font-size: 13px;
-            font-weight: 600;
+        .add-to-card-modal-content {
+            margin: var(--spacing-lg) 0;
+        }
+
+        .add-to-card-modal-name {
+            font-size: 24px;
+            font-weight: 700;
             color: var(--color-primary);
             margin-bottom: var(--spacing-md);
         }
 
-        .share-link-input {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
+        .add-to-card-modal-company {
+            font-size: 16px;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-xl);
         }
 
-        .share-link-input input {
-            flex: 1;
-        }
-
-        .share-link-buttons {
+        .add-to-card-buttons {
             display: flex;
-            gap: var(--spacing-sm);
-            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            justify-content: center;
         }
 
         /* レスポンシブ */
@@ -1230,14 +1316,30 @@
             }
 
             .login-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .share-link-buttons {
                 flex-direction: column;
             }
 
-            .share-link-buttons button {
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .share-buttons button {
+                width: 100%;
+            }
+
+            .add-to-card-buttons {
+                flex-direction: column;
+            }
+
+            .add-to-card-buttons button {
+                width: 100%;
+            }
+
+            .my-card-actions {
+                flex-direction: column;
+            }
+
+            .my-card-actions button {
                 width: 100%;
             }
         }
@@ -1248,26 +1350,46 @@
     <div class="login-container" id="loginContainer">
         <div class="login-box">
             <div class="login-title">ビジカマネ</div>
-            <div class="login-subtitle">Business Card Management</div>
+            <div class="login-subtitle">BizicaMe - Business Card Management</div>
             
-            <div class="login-form-group">
-                <label for="loginName">ユーザー名</label>
-                <input type="text" id="loginName" placeholder="山田太郎">
+            <div class="login-tabs">
+                <button class="login-tab active" data-tab="login-tab">ログイン</button>
+                <button class="login-tab" data-tab="signup-tab">新規登録</button>
             </div>
-            
-            <div class="login-form-group">
-                <label for="loginEmail">メールアドレス</label>
-                <input type="email" id="loginEmail" placeholder="your@email.com">
+
+            <!-- ログインタブ -->
+            <div class="login-content active" id="login-tab">
+                <div class="login-form-group">
+                    <label for="loginEmail">メールアドレス</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com">
+                </div>
+                
+                <div class="login-form-group">
+                    <label for="loginPassword">パスワード</label>
+                    <input type="password" id="loginPassword" placeholder="パスワード">
+                </div>
+                
+                <button class="btn btn-primary btn-block" id="loginBtn">ログイン</button>
             </div>
-            
-            <div class="login-form-group">
-                <label for="loginPassword">パスワード</label>
-                <input type="password" id="loginPassword" placeholder="パスワード">
-            </div>
-            
-            <div class="login-buttons">
-                <button class="btn btn-primary" id="loginBtn">ログイン</button>
-                <button class="btn btn-secondary" id="signupBtn">新規登録</button>
+
+            <!-- 新規登録タブ -->
+            <div class="login-content" id="signup-tab">
+                <div class="login-form-group">
+                    <label for="signupEmail">メールアドレス</label>
+                    <input type="email" id="signupEmail" placeholder="your@email.com">
+                </div>
+                
+                <div class="login-form-group">
+                    <label for="signupPassword">パスワード</label>
+                    <input type="password" id="signupPassword" placeholder="パスワード（6文字以上）">
+                </div>
+
+                <div class="login-form-group">
+                    <label for="signupPasswordConfirm">パスワード（確認）</label>
+                    <input type="password" id="signupPasswordConfirm" placeholder="パスワード（確認）">
+                </div>
+                
+                <button class="btn btn-primary btn-block" id="signupBtn">新規登録</button>
             </div>
         </div>
     </div>
@@ -1280,7 +1402,7 @@
             <div class="header-content">
                 <div>
                     <div class="header-title">ビジカマネ</div>
-                    <div class="header-subtitle">Business Card Management</div>
+                    <div class="header-subtitle">BizicaMe - Business Card Management</div>
                 </div>
                 <div class="header-right">
                     <div class="user-info">
@@ -1307,6 +1429,9 @@
                             <a class="sidebar-nav-link" data-section="add">➕ 名刺登録</a>
                         </li>
                         <li class="sidebar-nav-item">
+                            <a class="sidebar-nav-link" data-section="my-card">🆔 マイ名刺</a>
+                        </li>
+                        <li class="sidebar-nav-item">
                             <a class="sidebar-nav-link" data-section="data">⚙️ データ管理</a>
                         </li>
                     </ul>
@@ -1321,6 +1446,8 @@
             <main class="content">
                 <!-- ダッシュボード -->
                 <section class="content-section active" id="dashboardSection">
+                    <h1 class="section-title">ダッシュボード</h1>
+                    
                     <div class="dashboard-grid" id="dashboardStats">
                         <!-- 動的に生成 -->
                     </div>
@@ -1342,6 +1469,8 @@
 
                 <!-- 名刺一覧 -->
                 <section class="content-section" id="listSection">
+                    <h1 class="section-title">名刺一覧</h1>
+                    
                     <div class="list-controls">
                         <input type="text" class="search-input" id="searchInput" placeholder="フリーワード検索（氏名、会社など）">
                         
@@ -1419,9 +1548,9 @@
 
                 <!-- 名刺登録 -->
                 <section class="content-section" id="addSection">
+                    <h1 class="section-title">新規名刺登録</h1>
+                    
                     <div class="form-section">
-                        <h2 class="section-title">新規名刺登録</h2>
-                        
                         <form id="cardForm">
                             <div class="form-group required">
                                 <label for="cardName">氏名</label>
@@ -1509,11 +1638,20 @@
                     </div>
                 </section>
 
+                <!-- マイ名刺 -->
+                <section class="content-section" id="myCardSection">
+                    <h1 class="section-title">マイ名刺</h1>
+                    
+                    <div id="myCardContainer">
+                        <!-- 動的に生成 -->
+                    </div>
+                </section>
+
                 <!-- データ管理 -->
                 <section class="content-section" id="dataSection">
+                    <h1 class="section-title">データ管理</h1>
+                    
                     <div class="form-section">
-                        <h2 class="section-title">データ管理</h2>
-
                         <div style="margin-bottom: var(--spacing-xl);">
                             <h3 style="font-weight: 600; margin-bottom: var(--spacing-md); color: var(--color-primary);">データのエクスポート</h3>
                             <p style="margin-bottom: var(--spacing-md); color: var(--color-text-light);">現在のすべての名刺データをJSON形式でダウンロードできます。バックアップとしてご利用ください。</p>
@@ -1549,12 +1687,9 @@
             <div class="modal-body">
                 <img id="modalImage" style="display: none;">
                 
-                <div class="share-link-container" id="shareContainer" style="display: none;">
-                    <div class="share-link-title">📤 この名刺を共有</div>
-                    <div class="share-link-input">
-                        <input type="text" id="shareLink" readonly style="background: white;">
-                    </div>
-                    <div class="share-link-buttons">
+                <div class="share-info" id="shareInfo" style="display: none;">
+                    <div class="share-info-title">📤 この名刺を共有</div>
+                    <div class="share-buttons">
                         <button class="btn btn-secondary btn-small" id="copyShareLinkBtn">🔗 リンクをコピー</button>
                         <button class="btn btn-secondary btn-small" id="shareBtn">📱 共有</button>
                     </div>
@@ -1571,11 +1706,8 @@
                     <div class="modal-info-value" style="white-space: pre-wrap;"></div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary btn-small" id="modalFavoriteBtn">☆ お気に入り</button>
-                <button class="btn btn-secondary btn-small" id="modalEditBtn">✎ 編集</button>
-                <button class="btn btn-danger btn-small" id="modalDeleteBtn">🗑 削除</button>
-                <button class="btn btn-primary btn-small" id="modalCloseFooterBtn">閉じる</button>
+            <div class="modal-footer" id="modalFooter">
+                <!-- 動的に生成 -->
             </div>
         </div>
     </div>
@@ -1653,12 +1785,33 @@
         </div>
     </div>
 
+    <!-- 追加確認モーダル（共有名刺を追加） -->
+    <div class="modal-overlay" id="addToCardModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">名刺を追加</h2>
+                <button class="modal-close" id="addToCardCloseBtn">✕</button>
+            </div>
+            <div class="modal-body add-to-card-modal">
+                <div class="add-to-card-modal-content">
+                    <div class="add-to-card-modal-name" id="addToCardName"></div>
+                    <div class="add-to-card-modal-company" id="addToCardCompany"></div>
+                    <p style="color: var(--color-text-light); margin-bottom: var(--spacing-lg);">この名刺をあなたの一覧に追加しますか？</p>
+                </div>
+            </div>
+            <div class="modal-footer add-to-card-buttons">
+                <button class="btn btn-success" id="confirmAddToCardBtn">✓ 追加する</button>
+                <button class="btn btn-secondary" id="cancelAddToCardBtn">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
     <!-- トースト通知 -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, setDoc, deleteDoc, doc, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
         // Firebase設定
@@ -1680,9 +1833,17 @@
         // グローバル変数
         let currentUser = null;
         let cards = [];
+        let myCard = null;
         let currentEditingCardId = null;
         let filteredCards = [];
         let currentModalCardId = null;
+        let shareCardId = null;
+
+        // URLパラメータから共有カードIDを取得
+        function getShareCardFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('shareCard');
+        }
 
         // ===== ユーティリティ関数 =====
         function showToast(message, type = 'info') {
@@ -1764,38 +1925,21 @@
         async function extractTextFromImage(imageSrc) {
             try {
                 document.getElementById('ocrLoading').classList.add('active');
+                document.getElementById('ocrStatus').textContent = '';
+
+                const worker = await Tesseract.createWorker('jpn');
+                const result = await worker.recognize(imageSrc);
+                const text = result.data.text;
+
+                parseBusinessCardText(text);
                 
-                // 簡易版：Google Cloud Vision APIを使用する場合の実装例
-                // ここでは、Tesseract.jsを使用した実装を推奨
-
-                // Tesseract.jsの CDN から動的ロード
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
-                document.head.appendChild(script);
-
-                script.onload = async () => {
-                    try {
-                        const worker = await Tesseract.createWorker('jpn');
-                        const result = await worker.recognize(imageSrc);
-                        const text = result.data.text;
-
-                        // テキストを解析して名刺情報を抽出
-                        parseBusinessCardText(text);
-                        
-                        await worker.terminate();
-                        document.getElementById('ocrStatus').textContent = '✓ テキスト抽出完了！フォームに入力されました';
-                    } catch (error) {
-                        console.error('OCRエラー:', error);
-                        showToast('OCR処理に失敗しました: ' + error.message, 'error');
-                        document.getElementById('ocrStatus').textContent = '✗ エラーが発生しました';
-                    } finally {
-                        document.getElementById('ocrLoading').classList.remove('active');
-                    }
-                };
-
+                await worker.terminate();
+                document.getElementById('ocrStatus').textContent = '✓ テキスト抽出完了！フォームに入力されました';
             } catch (error) {
-                console.error('OCR初期化エラー:', error);
-                showToast('OCRの初期化に失敗しました', 'error');
+                console.error('OCRエラー:', error);
+                showToast('OCR処理に失敗しました。手動で入力してください', 'error');
+                document.getElementById('ocrStatus').textContent = '✗ エラーが発生しました';
+            } finally {
                 document.getElementById('ocrLoading').classList.remove('active');
             }
         }
@@ -1803,44 +1947,29 @@
         function parseBusinessCardText(text) {
             const lines = text.split('\n').filter(line => line.trim());
 
-            // 簡易的な抽出ロジック
-            let name = '';
-            let company = '';
-            let phone = '';
-            let email = '';
-            let address = '';
-
-            lines.forEach((line, index) => {
+            lines.forEach((line) => {
                 // メールアドレスの抽出
                 const emailMatch = line.match(/[\w\.-]+@[\w\.-]+\.\w+/);
                 if (emailMatch) {
-                    email = emailMatch[0];
-                    document.getElementById('cardEmail').value = email;
+                    document.getElementById('cardEmail').value = emailMatch[0];
                 }
 
-                // 電話番号の抽出（複数パターン）
+                // 電話番号の抽出
                 const phoneMatch = line.match(/(\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{4}|\d{10,11})/);
-                if (phoneMatch && !phone) {
-                    phone = phoneMatch[0].replace(/[-.\s]/g, '');
-                    document.getElementById('cardPhone').value = phone;
-                }
-
-                // 最初の行を名前として推測
-                if (index === 0 && line.length < 20 && !line.includes('株式会社')) {
-                    name = line.trim();
-                    document.getElementById('cardName').value = name;
+                if (phoneMatch && !document.getElementById('cardPhone').value) {
+                    document.getElementById('cardPhone').value = phoneMatch[0].replace(/[-.\s]/g, '');
                 }
 
                 // 株式会社が含まれている行を会社名として
-                if (line.includes('株式会社') || line.includes('会社') || line.includes('Corp') || line.includes('Inc')) {
-                    company = line.trim();
-                    document.getElementById('cardCompany').value = company;
+                if ((line.includes('株式会社') || line.includes('会社')) && !document.getElementById('cardCompany').value) {
+                    document.getElementById('cardCompany').value = line.trim();
                 }
             });
 
-            // フォームに情報が入力されていなかった場合、最初の行を名前、次を会社とする
-            if (!name) document.getElementById('cardName').value = lines[0] || '';
-            if (!company && lines.length > 1) document.getElementById('cardCompany').value = lines[1] || '';
+            // 最初の行を名前として
+            if (!document.getElementById('cardName').value && lines.length > 0) {
+                document.getElementById('cardName').value = lines[0];
+            }
         }
 
         // ===== Firestore操作 =====
@@ -1853,7 +1982,8 @@
                 cards = [];
                 
                 snapshot.forEach(doc => {
-                    cards.push({ id: doc.id, ...doc.data() });
+                    const data = doc.data();
+                    cards.push({ id: doc.id, ...data });
                 });
 
                 cards.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -1861,7 +1991,25 @@
                 renderAll();
             } catch (error) {
                 console.error("Firestoreからの読み込みエラー:", error);
-                showToast('データの読み込みに失敗しました: ' + error.message, 'error');
+                showToast('データの読み込みに失敗しました', 'error');
+            }
+        }
+
+        async function loadMyCard() {
+            if (!currentUser) return;
+
+            try {
+                const q = query(collection(db, "users", currentUser.uid, "myCard"));
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    myCard = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+                } else {
+                    myCard = null;
+                }
+                renderMyCard();
+            } catch (error) {
+                console.error("マイ名刺読み込みエラー:", error);
             }
         }
 
@@ -1892,7 +2040,9 @@
                         imageData: cardData.imageData || '',
                         createdAt: now,
                         updatedAt: now,
-                        lastContactedAt: cardData.lastContactedAt || null
+                        lastContactedAt: cardData.lastContactedAt || null,
+                        isShared: cardData.isShared || false,
+                        sharedFrom: cardData.sharedFrom || null
                     };
                     
                     const docRef = await addDoc(cardsRef, newCardData);
@@ -1924,7 +2074,40 @@
                 }
             } catch (error) {
                 console.error("Firestoreへの保存エラー:", error);
-                showToast('データの保存に失敗しました: ' + error.message, 'error');
+                showToast('データの保存に失敗しました', 'error');
+                return null;
+            }
+        }
+
+        async function saveMyCardToFirestore(cardData) {
+            if (!currentUser) {
+                showToast('ユーザーが認証されていません', 'error');
+                return null;
+            }
+
+            try {
+                const myCardRef = doc(db, "users", currentUser.uid, "myCard", "profile");
+                const now = new Date().toISOString();
+
+                const myCardData = {
+                    name: cardData.name,
+                    company: cardData.company,
+                    department: cardData.department || '',
+                    title: cardData.title || '',
+                    phone: cardData.phone || '',
+                    email: cardData.email || '',
+                    address: cardData.address || '',
+                    website: cardData.website || '',
+                    imageData: cardData.imageData || '',
+                    updatedAt: now
+                };
+
+                await setDoc(myCardRef, myCardData, { merge: true });
+                console.log("マイ名刺を保存:", myCardRef.id);
+                return myCardRef.id;
+            } catch (error) {
+                console.error("マイ名刺保存エラー:", error);
+                showToast('マイ名刺の保存に失敗しました', 'error');
                 return null;
             }
         }
@@ -1938,7 +2121,7 @@
                 return true;
             } catch (error) {
                 console.error("Firestoreからの削除エラー:", error);
-                showToast('データの削除に失敗しました: ' + error.message, 'error');
+                showToast('データの削除に失敗しました', 'error');
                 return false;
             }
         }
@@ -1963,17 +2146,17 @@
         }
 
         async function handleSignup() {
-            const name = document.getElementById('loginName').value.trim();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const passwordConfirm = document.getElementById('signupPasswordConfirm').value.trim();
 
-            if (!name) {
-                showToast('ユーザー名を入力してください', 'error');
+            if (!email || !password || !passwordConfirm) {
+                showToast('すべての項目を入力してください', 'error');
                 return;
             }
 
-            if (!email || !password) {
-                showToast('メールアドレスとパスワードを入力してください', 'error');
+            if (password !== passwordConfirm) {
+                showToast('パスワードが一致しません', 'error');
                 return;
             }
 
@@ -1983,20 +2166,14 @@
             }
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // ユーザープロフィールに名前を設定
-                await updateProfile(userCredential.user, {
-                    displayName: name
-                });
-                
+                await createUserWithEmailAndPassword(auth, email, password);
                 showToast('アカウントを作成しました', 'success');
             } catch (error) {
                 console.error("新規登録エラー:", error);
                 if (error.code === 'auth/email-already-in-use') {
                     showToast('このメールアドレスはすでに登録されています', 'error');
                 } else {
-                    showToast('新規登録に失敗しました: ' + error.message, 'error');
+                    showToast('新規登録に失敗しました', 'error');
                 }
             }
         }
@@ -2005,6 +2182,7 @@
             try {
                 await signOut(auth);
                 cards = [];
+                myCard = null;
                 currentUser = null;
                 showToast('ログアウトしました', 'success');
             } catch (error) {
@@ -2021,17 +2199,91 @@
                 document.getElementById('loginContainer').classList.add('hidden');
                 document.getElementById('appLayout').style.display = 'flex';
                 document.getElementById('userEmail').textContent = user.email;
-                document.getElementById('userAvatar').textContent = (user.displayName || user.email)[0].toUpperCase();
+                document.getElementById('userAvatar').textContent = user.email[0].toUpperCase();
                 loadCardsFromFirestore();
+                loadMyCard();
+
+                // URLに共有カードIDがあればポップアップ表示
+                const sharedCardId = getShareCardFromUrl();
+                if (sharedCardId) {
+                    showAddToCardModal(sharedCardId);
+                    // URLをクリア
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
             } else {
                 currentUser = null;
                 document.getElementById('loginContainer').classList.remove('hidden');
                 document.getElementById('appLayout').style.display = 'none';
-                document.getElementById('loginName').value = '';
                 document.getElementById('loginEmail').value = '';
                 document.getElementById('loginPassword').value = '';
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('signupPasswordConfirm').value = '';
+
+                // ログインなしでも共有カードを表示
+                const sharedCardId = getShareCardFromUrl();
+                if (sharedCardId) {
+                    showSharedCardView(sharedCardId);
+                }
             }
         });
+
+        // ===== 共有カード表示 =====
+        async function showSharedCardView(cardId) {
+            try {
+                // ここでは簡易版として、ダミーデータから取得
+                // 実際はCloud Functionで公開カードを取得する必要があります
+                showToast('共有カードを表示しています。ログインして追加できます', 'info');
+            } catch (error) {
+                console.error("共有カード取得エラー:", error);
+                showToast('共有カードが見つかりません', 'error');
+            }
+        }
+
+        function showAddToCardModal(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) {
+                showToast('名刺が見つかりません', 'error');
+                return;
+            }
+
+            document.getElementById('addToCardName').textContent = card.name;
+            document.getElementById('addToCardCompany').textContent = card.company;
+            shareCardId = cardId;
+            document.getElementById('addToCardModal').classList.add('active');
+        }
+
+        async function confirmAddToCard() {
+            if (!shareCardId) return;
+
+            const card = cards.find(c => c.id === shareCardId);
+            if (!card) {
+                showToast('名刺が見つかりません', 'error');
+                return;
+            }
+
+            // 新規カードとして追加
+            const newCard = {
+                ...card,
+                id: generateId(),
+                isShared: true,
+                sharedFrom: shareCardId
+            };
+
+            const firebaseId = await saveCardToFirestore(newCard);
+            if (firebaseId) {
+                newCard.id = firebaseId;
+                cards.push(newCard);
+                showToast('名刺を追加しました', 'success');
+                closeAddToCardModal();
+                renderAll();
+            }
+        }
+
+        function closeAddToCardModal() {
+            document.getElementById('addToCardModal').classList.remove('active');
+            shareCardId = null;
+        }
 
         // ===== 名刺管理関数 =====
         async function handleAddCard(e) {
@@ -2098,7 +2350,9 @@
                 imageData,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
-                lastContactedAt: null
+                lastContactedAt: null,
+                isShared: false,
+                sharedFrom: null
             };
 
             const firebaseId = await saveCardToFirestore(cardData);
@@ -2179,6 +2433,44 @@
                 closeEditModal();
                 closeCardModal();
                 renderAll();
+            }
+        }
+
+        async function handleSaveMyCard(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('myCardName').value.trim();
+            const company = document.getElementById('myCardCompany').value.trim();
+            const department = document.getElementById('myCardDepartment').value.trim();
+            const title = document.getElementById('myCardTitle').value.trim();
+            const phone = document.getElementById('myCardPhone').value.trim();
+            const email = document.getElementById('myCardEmail').value.trim();
+            const address = document.getElementById('myCardAddress').value.trim();
+            const website = document.getElementById('myCardWebsite').value.trim();
+            const imageData = document.getElementById('myCardImagePreview').src || '';
+
+            if (!name || !company) {
+                showToast('氏名と会社名は必須です', 'error');
+                return;
+            }
+
+            const myCardData = {
+                name,
+                company,
+                department,
+                title,
+                phone,
+                email,
+                address,
+                website,
+                imageData
+            };
+
+            const result = await saveMyCardToFirestore(myCardData);
+            if (result) {
+                myCard = { id: 'profile', ...myCardData };
+                showToast('マイ名刺を保存しました', 'success');
+                renderMyCard();
             }
         }
 
@@ -2298,6 +2590,92 @@
                     <div class="ranking-count">${(JSON.stringify(cards).length / 1024).toFixed(2)} KB</div>
                 </div>
             `;
+        }
+
+        function renderMyCard() {
+            const container = document.getElementById('myCardContainer');
+
+            if (!myCard) {
+                container.innerHTML = `
+                    <div class="form-section">
+                        <p style="color: var(--color-text-light); margin-bottom: var(--spacing-lg);">マイ名刺がまだ作成されていません。以下のフォームで作成してください。</p>
+                        <form id="myCardForm">
+                            <div class="form-group required">
+                                <label for="myCardName">氏名</label>
+                                <input type="text" id="myCardName" required>
+                            </div>
+
+                            <div class="form-group required">
+                                <label for="myCardCompany">会社名</label>
+                                <input type="text" id="myCardCompany" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardDepartment">部署</label>
+                                <input type="text" id="myCardDepartment">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardTitle">役職</label>
+                                <input type="text" id="myCardTitle">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardPhone">電話番号</label>
+                                <input type="tel" id="myCardPhone">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardEmail">メール</label>
+                                <input type="email" id="myCardEmail">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardAddress">住所</label>
+                                <input type="text" id="myCardAddress">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardWebsite">Webサイト</label>
+                                <input type="url" id="myCardWebsite">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="myCardImage">プロフィール画像</label>
+                                <input type="file" id="myCardImage" accept="image/*">
+                                <img id="myCardImagePreview" class="image-preview" style="display: none;">
+                            </div>
+
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary btn-block">マイ名刺を作成</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+
+                document.getElementById('myCardForm').addEventListener('submit', handleSaveMyCard);
+                handleImageUpload('myCardImage', 'myCardImagePreview');
+            } else {
+                container.innerHTML = `
+                    <div class="my-card-preview">
+                        ${myCard.imageData ? `<img src="${myCard.imageData}" style="width: 100%; height: 200px; border-radius: var(--radius-md); object-fit: cover; margin-bottom: var(--spacing-lg);">` : ''}
+                        <div class="my-card-name">${myCard.name}</div>
+                        <div class="my-card-company">${myCard.company}</div>
+                        ${myCard.department ? `<div class="my-card-info">部署: ${myCard.department}</div>` : ''}
+                        ${myCard.title ? `<div class="my-card-info">役職: ${myCard.title}</div>` : ''}
+                        ${myCard.phone ? `<div class="my-card-info">☎ ${myCard.phone}</div>` : ''}
+                        ${myCard.email ? `<div class="my-card-info">✉ ${myCard.email}</div>` : ''}
+                        ${myCard.address ? `<div class="my-card-info">住所: ${myCard.address}</div>` : ''}
+                        ${myCard.website ? `<div class="my-card-info"><a href="${myCard.website}" target="_blank">${myCard.website}</a></div>` : ''}
+                        
+                        <div class="my-card-actions">
+                            <button class="btn btn-secondary" id="editMyCardBtn" onclick="window.editMyCard()">✏️ 編集</button>
+                            <button class="btn btn-secondary" id="shareMyCardBtn" onclick="window.shareMyCard()">📱 共有</button>
+                            <button class="btn btn-secondary" id="qrMyCardBtn">📲 QRコード（準備中）</button>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         function renderCardList() {
@@ -2451,11 +2829,27 @@
                 modalImage.style.display = 'none';
             }
 
-            // 共有リンク
-            const shareContainer = document.getElementById('shareContainer');
-            const shareLink = generateShareLink(cardId);
-            document.getElementById('shareLink').value = shareLink;
-            shareContainer.style.display = 'block';
+            // 共有情報
+            const shareInfo = document.getElementById('shareInfo');
+            if (currentUser) {
+                shareInfo.style.display = 'block';
+                const shareLink = generateShareLink(cardId);
+                document.getElementById('copyShareLinkBtn').onclick = () => copyText(shareLink);
+                document.getElementById('shareBtn').onclick = () => {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'ビジカマネ - ' + card.name,
+                            text: `${card.name}(${card.company})の名刺を共有します`,
+                            url: shareLink
+                        }).catch(err => console.log('共有エラー:', err));
+                    } else {
+                        copyText(shareLink);
+                        showToast('リンクをコピーしました。SNSやメールで共有してください', 'info');
+                    }
+                };
+            } else {
+                shareInfo.style.display = 'none';
+            }
 
             // 情報
             const modalInfo = document.getElementById('modalInfo');
@@ -2498,14 +2892,32 @@
                 modalMemo.style.display = 'none';
             }
 
-            // ボタン状態
-            document.getElementById('modalFavoriteBtn').textContent = card.favorite ? '⭐ お気に入り解除' : '☆ お気に入り';
-            document.getElementById('modalFavoriteBtn').className = 'btn btn-secondary btn-small' + (card.favorite ? ' active' : '');
+            // フッター
+            const modalFooter = document.getElementById('modalFooter');
+            if (currentUser) {
+                // ログイン時のみ編集・削除可能
+                modalFooter.innerHTML = `
+                    <button class="btn btn-secondary btn-small" id="modalFavoriteBtn">☆ お気に入り</button>
+                    <button class="btn btn-secondary btn-small" id="modalEditBtn">✎ 編集</button>
+                    <button class="btn btn-danger btn-small" id="modalDeleteBtn">🗑 削除</button>
+                    <button class="btn btn-primary btn-small" id="modalCloseFooterBtn">閉じる</button>
+                `;
 
-            // イベントリスナー設定
-            document.getElementById('modalFavoriteBtn').onclick = () => toggleFavorite(cardId);
-            document.getElementById('modalEditBtn').onclick = () => openEditModal(cardId);
-            document.getElementById('modalDeleteBtn').onclick = () => deleteCard(cardId);
+                // ボタン状態
+                const favoriteBtn = document.getElementById('modalFavoriteBtn');
+                favoriteBtn.textContent = card.favorite ? '⭐ お気に入り解除' : '☆ お気に入り';
+                favoriteBtn.className = 'btn btn-secondary btn-small' + (card.favorite ? ' active' : '');
+                favoriteBtn.onclick = () => toggleFavorite(cardId);
+
+                document.getElementById('modalEditBtn').onclick = () => openEditModal(cardId);
+                document.getElementById('modalDeleteBtn').onclick = () => deleteCard(cardId);
+            } else {
+                // ログイン前は閉じるボタンのみ
+                modalFooter.innerHTML = `
+                    <button class="btn btn-primary btn-small" id="modalCloseFooterBtn">閉じる</button>
+                `;
+            }
+
             document.getElementById('modalCloseFooterBtn').onclick = closeCardModal;
             document.getElementById('modalCloseBtn').onclick = closeCardModal;
 
@@ -2619,6 +3031,8 @@
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
 
+            if (!input) return;
+
             input.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -2637,8 +3051,26 @@
             document.getElementById('sidebar').classList.remove('mobile-open');
         }
 
+        // ===== ログインタブ切り替え =====
+        function setupLoginTabs() {
+            document.querySelectorAll('.login-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const tabName = e.target.dataset.tab;
+                    
+                    document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.login-content').forEach(c => c.classList.remove('active'));
+                    
+                    e.target.classList.add('active');
+                    document.getElementById(tabName).classList.add('active');
+                });
+            });
+        }
+
         // ===== イベントリスナー設定 =====
         function setupEventListeners() {
+            // ログインタブ
+            setupLoginTabs();
+
             // ログイン
             document.getElementById('loginBtn').addEventListener('click', handleLogin);
             document.getElementById('signupBtn').addEventListener('click', handleSignup);
@@ -2647,6 +3079,10 @@
             // ログイン時のEnter キー
             document.getElementById('loginPassword').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
+            });
+
+            document.getElementById('signupPasswordConfirm').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSignup();
             });
 
             // セクション切り替え
@@ -2706,27 +3142,10 @@
             document.getElementById('editModalCloseBtn').addEventListener('click', closeEditModal);
             handleImageUpload('editCardImage', 'editImagePreview');
 
-            // 共有機能
-            document.getElementById('copyShareLinkBtn').addEventListener('click', () => {
-                const shareLink = document.getElementById('shareLink').value;
-                copyText(shareLink);
-            });
-
-            document.getElementById('shareBtn').addEventListener('click', () => {
-                const shareLink = document.getElementById('shareLink').value;
-                const card = cards.find(c => c.id === currentModalCardId);
-                
-                if (navigator.share) {
-                    navigator.share({
-                        title: 'ビジカマネ - ' + card.name,
-                        text: `${card.name}(${card.company})の名刺を共有します`,
-                        url: shareLink
-                    }).catch(err => console.log('共有エラー:', err));
-                } else {
-                    copyText(shareLink);
-                    showToast('リンクをコピーしました。SNSやメールで共有してください', 'info');
-                }
-            });
+            // 追加確認モーダル
+            document.getElementById('confirmAddToCardBtn').addEventListener('click', confirmAddToCard);
+            document.getElementById('cancelAddToCardBtn').addEventListener('click', closeAddToCardModal);
+            document.getElementById('addToCardCloseBtn').addEventListener('click', closeAddToCardModal);
 
             // モーダル閉じる
             document.getElementById('cardModal').addEventListener('click', (e) => {
@@ -2734,6 +3153,9 @@
             });
             document.getElementById('editModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('editModal')) closeEditModal();
+            });
+            document.getElementById('addToCardModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('addToCardModal')) closeAddToCardModal();
             });
 
             // データ管理
@@ -2763,6 +3185,16 @@
         window.copyText = copyText;
         window.deleteCard = deleteCard;
         window.switchSection = switchSection;
+        window.editMyCard = () => {
+            alert('マイ名刺編集画面に遷移します（今後実装）');
+        };
+        window.shareMyCard = () => {
+            if (myCard) {
+                const shareLink = window.location.origin + window.location.pathname;
+                copyText(shareLink);
+                showToast('マイ名刺ページのリンクをコピーしました', 'info');
+            }
+        };
     </script>
 </body>
 </html>
