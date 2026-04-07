@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ビジカマネ - Business Card Management</title>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1115,87 +1114,6 @@
             margin-bottom: var(--spacing-md);
         }
 
-        .ocr-placeholder {
-            background-color: #f0f4f8;
-            border: 2px dashed var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-lg);
-            text-align: center;
-        }
-
-        .ocr-placeholder-icon {
-            font-size: 32px;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .ocr-placeholder-title {
-            font-weight: 600;
-            color: var(--color-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .ocr-placeholder-description {
-            font-size: 12px;
-            color: var(--color-text-light);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .ocr-status {
-            font-size: 12px;
-            color: var(--color-success);
-            margin-top: var(--spacing-md);
-            font-weight: 600;
-        }
-
-        .ocr-loading {
-            display: none;
-            text-align: center;
-            padding: var(--spacing-lg);
-        }
-
-        .ocr-loading.active {
-            display: block;
-        }
-
-        .spinner {
-            border: 3px solid var(--color-light);
-            border-top: 3px solid var(--color-accent);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto var(--spacing-md);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .add-to-card-modal-content {
-            text-align: center;
-            margin: var(--spacing-lg) 0;
-        }
-
-        .add-to-card-modal-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--color-primary);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .add-to-card-modal-company {
-            font-size: 16px;
-            color: var(--color-text-light);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .add-to-card-buttons {
-            display: flex;
-            gap: var(--spacing-md);
-            justify-content: center;
-        }
-
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -1311,14 +1229,6 @@
                 width: 100%;
             }
 
-            .add-to-card-buttons {
-                flex-direction: column;
-            }
-
-            .add-to-card-buttons button {
-                width: 100%;
-            }
-
             .my-card-actions {
                 flex-direction: column;
             }
@@ -1409,7 +1319,7 @@
                     <div class="sidebar-section-title">メニュー</div>
                     <ul class="sidebar-nav">
                         <li class="sidebar-nav-item">
-                            <a class="sidebar-nav-link active" data-section="dashboard">📊 ダッシュボード</a>
+                            <a class="sidebar-nav-link active" data-section="dashboard">📊 ダッシュボ��ド</a>
                         </li>
                         <li class="sidebar-nav-item">
                             <a class="sidebar-nav-link" data-section="list">📋 名刺一覧</a>
@@ -1499,7 +1409,7 @@
                         <div class="control-group">
                             <label>表示形式</label>
                             <div class="view-toggle">
-                                <button class="view-toggle-btn active" data-view="grid">���リッド</button>
+                                <button class="view-toggle-btn active" data-view="grid">グリッド</button>
                                 <button class="view-toggle-btn" data-view="table">テーブル</button>
                             </div>
                         </div>
@@ -1528,7 +1438,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="cardsTableBody">
-                                    <!-- 動的に生成 -->
+                                    <!-- 動的���生成 -->
                                 </tbody>
                             </table>
                         </div>
@@ -1607,18 +1517,6 @@
                                 <img id="imagePreview" class="image-preview" style="display: none;">
                             </div>
 
-                            <div class="ocr-placeholder">
-                                <div class="ocr-placeholder-icon">📷</div>
-                                <div class="ocr-placeholder-title">OCR読み取り</div>
-                                <div class="ocr-placeholder-description">名刺の画像をアップロードして、テキストを自動抽出します</div>
-                                <button type="button" class="btn btn-secondary" id="ocrBtn" style="margin-top: var(--spacing-md);">🔍 OCRで読み取る</button>
-                                <div class="ocr-loading" id="ocrLoading">
-                                    <div class="spinner"></div>
-                                    <div>テキストを抽出中...</div>
-                                </div>
-                                <div class="ocr-status" id="ocrStatus"></div>
-                            </div>
-
                             <div class="form-buttons">
                                 <button type="submit" class="btn btn-primary btn-block">名刺を保存</button>
                                 <button type="reset" class="btn btn-secondary btn-block">リセット</button>
@@ -1627,7 +1525,7 @@
                     </div>
                 </section>
 
-                <!-- マイ名刺 -->
+                <!-- マ���名刺 -->
                 <section class="content-section" id="myCardSection">
                     <h1 class="section-title">マイ名刺</h1>
                     
@@ -1781,12 +1679,14 @@
                 <h2 class="modal-title">名刺を追加</h2>
                 <button class="modal-close" id="addToCardCloseBtn">✕</button>
             </div>
-            <div class="modal-body add-to-card-modal-content">
-                <div class="add-to-card-modal-name" id="addToCardName"></div>
-                <div class="add-to-card-modal-company" id="addToCardCompany"></div>
-                <p style="color: var(--color-text-light); margin-bottom: var(--spacing-lg);">この名刺をあなたの一覧に追加しますか？</p>
+            <div class="modal-body">
+                <div style="text-align: center; margin: var(--spacing-lg) 0;">
+                    <div style="font-size: 24px; font-weight: 700; color: var(--color-primary); margin-bottom: var(--spacing-md);" id="addToCardName"></div>
+                    <div style="font-size: 16px; color: var(--color-text-light); margin-bottom: var(--spacing-xl);" id="addToCardCompany"></div>
+                    <p style="color: var(--color-text-light); margin-bottom: var(--spacing-lg);">この名刺をあなたの一覧に追加しますか？</p>
+                </div>
             </div>
-            <div class="modal-footer add-to-card-buttons">
+            <div class="modal-footer">
                 <button class="btn btn-success" id="confirmAddToCardBtn">✓ 追加する</button>
                 <button class="btn btn-secondary" id="cancelAddToCardBtn">キャンセル</button>
             </div>
@@ -1799,7 +1699,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setDoc, deleteDoc, doc, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, setDoc, deleteDoc, doc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
         // Firebase設定
         const firebaseConfig = {
@@ -1908,80 +1808,6 @@
             return baseUrl + '?shareCard=' + cardId;
         }
 
-        // ===== OCR機能 =====
-        async function extractTextFromImage(imageSrc) {
-            try {
-                document.getElementById('ocrLoading').classList.add('active');
-                document.getElementById('ocrStatus').textContent = '';
-
-                console.log('OCR開始...');
-                const worker = await Tesseract.createWorker('jpn+eng');
-                console.log('Worker作成完了');
-                
-                const result = await worker.recognize(imageSrc);
-                console.log('認識結果:', result);
-                
-                const text = result.data.text;
-                if (text) {
-                    parseBusinessCardText(text);
-                    document.getElementById('ocrStatus').textContent = '✓ テキスト抽出完了！フォームに入力されました';
-                } else {
-                    document.getElementById('ocrStatus').textContent = '✗ テキストが検出されませんでした';
-                }
-                
-                await worker.terminate();
-            } catch (error) {
-                console.error('OCRエラー:', error);
-                showToast('OCR処理に失敗しました。手動で入力してください', 'error');
-                document.getElementById('ocrStatus').textContent = '✗ エラーが発生しました: ' + error.message;
-            } finally {
-                document.getElementById('ocrLoading').classList.remove('active');
-            }
-        }
-
-        function parseBusinessCardText(text) {
-            const lines = text.split('\n').filter(line => line.trim());
-            console.log('解析テキスト:', lines);
-
-            let foundEmail = false;
-            let foundPhone = false;
-            let foundCompany = false;
-
-            lines.forEach((line) => {
-                // メールアドレスの抽出
-                if (!foundEmail) {
-                    const emailMatch = line.match(/[\w\.-]+@[\w\.-]+\.\w+/);
-                    if (emailMatch) {
-                        document.getElementById('cardEmail').value = emailMatch[0];
-                        foundEmail = true;
-                    }
-                }
-
-                // 電話番号の抽出
-                if (!foundPhone) {
-                    const phoneMatch = line.match(/(\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{4}|\d{10,11})/);
-                    if (phoneMatch) {
-                        document.getElementById('cardPhone').value = phoneMatch[0].replace(/[-.\s]/g, '');
-                        foundPhone = true;
-                    }
-                }
-
-                // 株式会社が含まれている行を会社名として
-                if (!foundCompany && (line.includes('株式会社') || line.includes('会社') || line.includes('Corp') || line.includes('Inc'))) {
-                    document.getElementById('cardCompany').value = line.trim();
-                    foundCompany = true;
-                }
-            });
-
-            // 最初の行を名前として
-            if (!document.getElementById('cardName').value && lines.length > 0) {
-                const firstLine = lines[0].trim();
-                if (!firstLine.includes('@') && firstLine.length < 20 && !firstLine.includes('株式会社')) {
-                    document.getElementById('cardName').value = firstLine;
-                }
-            }
-        }
-
         // ===== Firestore操作 =====
         async function loadCardsFromFirestore() {
             if (!currentUser) return;
@@ -1996,7 +1822,6 @@
                 });
 
                 cards.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                console.log("読み込み完了:", cards.length, "件");
                 renderAll();
             } catch (error) {
                 console.error("読み込みエラー:", error);
@@ -2050,7 +1875,10 @@
                         imageData: cardData.imageData || '',
                         createdAt: now,
                         updatedAt: now,
-                        lastContactedAt: cardData.lastContactedAt || null
+                        lastContactedAt: cardData.lastContactedAt || null,
+                        userId: currentUser.uid,
+                        userName: currentUser.displayName || currentUser.email,
+                        isPublic: true
                     };
                     
                     const docRef = await addDoc(cardsRef, newCardData);
@@ -2102,14 +1930,57 @@
                     address: cardData.address || '',
                     website: cardData.website || '',
                     imageData: cardData.imageData || '',
-                    updatedAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString(),
+                    userId: currentUser.uid
                 };
 
-                await setDoc(myCardRef, myCardData, { merge: true });
-                return myCardRef.id;
+                await setDoc(myCardRef, myCardData);
+                console.log("マイ名刺保存成功");
+                return true;
             } catch (error) {
                 console.error("マイ名刺保存エラー:", error);
-                showToast('マイ名刺の保存に失敗しました', 'error');
+                showToast('マイ名刺の保存に失敗しました: ' + error.message, 'error');
+                return null;
+            }
+        }
+
+        async function loadSharedCard(cardId) {
+            try {
+                // 共有データベース（全ユーザーのカード）から検索
+                const q = query(
+                    collection(db, "sharedCards"),
+                    where("originalId", "==", cardId)
+                );
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    return snapshot.docs[0].data();
+                } else {
+                    showToast('共有された名刺が見つかりません', 'error');
+                    return null;
+                }
+            } catch (error) {
+                console.error("共有カード読み込みエラー:", error);
+                showToast('共有カードの取得に失敗しました', 'error');
+                return null;
+            }
+        }
+
+        async function publishCardToShared(cardData) {
+            try {
+                const sharedCardData = {
+                    ...cardData,
+                    originalId: cardData.id,
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName || currentUser.email,
+                    publishedAt: new Date().toISOString()
+                };
+                
+                const docRef = await addDoc(collection(db, "sharedCards"), sharedCardData);
+                console.log("共有カード公開成功:", docRef.id);
+                return docRef.id;
+            } catch (error) {
+                console.error("共有カード公開エラー:", error);
                 return null;
             }
         }
@@ -2194,7 +2065,7 @@
         }
 
         // 認証状態の監視
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 document.getElementById('loginContainer').classList.add('hidden');
@@ -2206,12 +2077,9 @@
 
                 const sharedCardId = getShareCardFromUrl();
                 if (sharedCardId) {
-                    // 共有リンクから追加
-                    const sharedCard = cards.find(c => c.id === sharedCardId);
+                    const sharedCard = await loadSharedCard(sharedCardId);
                     if (sharedCard) {
                         showAddToCardModal(sharedCard);
-                    } else {
-                        showToast('共有された名刺が見つかりません', 'error');
                     }
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
@@ -2237,6 +2105,10 @@
                 id: generateId(),
                 favorite: false
             };
+            delete newCard.originalId;
+            delete newCard.userId;
+            delete newCard.userName;
+            delete newCard.publishedAt;
 
             const firebaseId = await saveCardToFirestore(newCard);
             if (firebaseId) {
@@ -2325,10 +2197,13 @@
             if (firebaseId) {
                 cardData.id = firebaseId;
                 cards.unshift(cardData);
+                
+                // 共有データベースにも公開
+                await publishCardToShared(cardData);
+                
                 showToast('名刺を保存しました', 'success');
                 document.getElementById('cardForm').reset();
                 document.getElementById('imagePreview').style.display = 'none';
-                document.getElementById('ocrStatus').textContent = '';
                 renderAll();
             }
         }
@@ -2411,7 +2286,7 @@
         }
 
         async function deleteCard(cardId) {
-            if (!confirm('この名刺を削除してもよろしいですか？')) return;
+            if (!confirm('この名刺を削除してもよろしいです���？')) return;
 
             const cardIndex = cards.findIndex(c => c.id === cardId);
             if (cardIndex === -1) return;
@@ -2602,8 +2477,8 @@
                         ${myCard.website ? `<div class="my-card-info"><a href="${myCard.website}" target="_blank">${myCard.website}</a></div>` : ''}
                         
                         <div class="my-card-actions">
-                            <button class="btn btn-secondary" id="editMyCardBtn">✏️ 編集</button>
-                            <button class="btn btn-secondary" id="shareMyCardBtn">📱 共有</button>
+                            <button class="btn btn-secondary" id="editMyCardBtn" type="button">✏️ 編集</button>
+                            <button class="btn btn-secondary" id="shareMyCardBtn" type="button">📱 共有</button>
                         </div>
                     </div>
                 `;
@@ -3087,16 +2962,6 @@
 
             document.getElementById('cardForm').addEventListener('submit', handleAddCard);
             handleImageUpload('cardImage', 'imagePreview');
-
-            document.getElementById('ocrBtn').addEventListener('click', (e) => {
-                e.preventDefault();
-                const imagePreview = document.getElementById('imagePreview');
-                if (!imagePreview.src) {
-                    showToast('先に画像をアップロードしてください', 'error');
-                    return;
-                }
-                extractTextFromImage(imagePreview.src);
-            });
 
             document.getElementById('editCardForm').addEventListener('submit', handleEditCard);
             document.getElementById('editSaveBtn').addEventListener('click', (e) => {
